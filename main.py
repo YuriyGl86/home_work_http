@@ -1,5 +1,7 @@
 import requests
 import pprint
+import datetime
+import time
 
 #  Task 1
 
@@ -63,3 +65,20 @@ class Yandex:
 yandex = Yandex(TOKEN)
 yandex.get_new_folder(new_folder_path)
 yandex.upload_file_to_disk(file_path, file)
+
+
+#  Task №3
+
+def get_time(days):
+    date_before = datetime.datetime.now()-datetime.timedelta(days=days)
+    date = date_before.date().timetuple()
+    return int(time.mktime(date))
+
+
+def get_questions(days):
+    link = "https://api.stackexchange.com/2.3/questions"
+    params = {'fromdate': get_time(days), 'order': 'desc', 'sort': 'activity', 'tagged': 'Python', 'site': 'stackoverflow'}
+    response = requests.get(link, params=params)
+    print(response.json())
+
+get_questions(2)
